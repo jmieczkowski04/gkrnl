@@ -17,9 +17,10 @@ ASFLAGS := -I$(abs_srctree)/include -m32 -O2 -fno-pie -fno-builtin -fomit-frame-
 ARFLAGS := cDPrT # P?
 MAKEFLAGS += --no-print-directory --rR
 
+KERNELNAME := vmgkrnl
 
 
-export CFLAGS ASFLAGS ARFLAGS MAKEFLAGS 
+export CFLAGS ASFLAGS ARFLAGS MAKEFLAGS KERNELNAME
 
 Q:=@
 ifeq ("$(origin V)", "command line")
@@ -40,20 +41,20 @@ BUILD_MAKEFILE := $(srctree)/scripts/Makefile.build
 build := -f $(srctree)/scripts/Makefile.build obj
 export BUILD_MAKEFILE build
 
-all: gkrnl launch
+all: $(KERNELNAME) launch
 	@:
 
-launch: gkrnl
-	$(Q)qemu-system-i386 -kernel gkrnl
+launch: $(KERNELNAME)
+	$(Q)qemu-system-i386 -kernel $(KERNELNAME)
 
-gkrnl: build gkrnl.lds
-	$(Q)echo "LD\t gkrnl"
-	$(Q)$(LD) -T gkrnl.lds built-in.a -o gkrnl
-	$(Q)grub-file --is-x86-multiboot gkrnl
+$(KERNELNAME): build gkrnl.lds
+	$(Q)echo "LD\t $(KERNELNAME)"
+	$(Q)$(LD) -T gkrnl.lds built-in.a -o $(KERNELNAME)
+	$(Q)grub-file --is-x86-multiboot $(KERNELNAME)
 
 clean:
 	$(Q)$(MAKE) $(build)=. clean
-	$(Q)rm -f gkrnl
+	$(Q)rm -f $(KERNELNAME)
 
 prepare:
 	$(Q)mkdir -p $(OBJTREE)

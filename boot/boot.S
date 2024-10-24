@@ -66,10 +66,10 @@ start:
 	pushl $0
 	popf
 
-	/* .extern vm_boot32_main
+	.extern vm_boot32_main
 	pushl %ebx
 	pushl %eax
-	call vm_boot32_main */
+	call vm_boot32_main
 hlt_loop:
 	hlt
 	jmp hlt_loop

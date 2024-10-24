@@ -1,0 +1,64 @@
+PHONY := $(obj)/
+$(obj)/:
+
+
+src := $(obj)
+kbuild-dir = $(if $(filter /%,$(src)),$(src),$(srctree)/$(src))
+kbuild-file = $(or $(wildcard $(kbuild-dir)/Kbuild),$(kbuild-dir)/Makefile)
+
+obj-y := 
+include $(kbuild-file)
+include $(srctree)/scripts/Makefile.config
+
+subdir-builtin := $(sort $(filter %/built-in.a, $(real-obj-y)))
+
+real-targets := $(filter-out $(subdir-builtin), $(real-obj-y))
+
+
+ ##############################################################
+ # main build rules
+ ##############################################################
+$(obj)/%.o: $(src)/%.c
+	$(Q)echo "CC\t" $@
+	$(Q)$(CC) $(CFLAGS) -o $@ $<
+
+$(obj)/%.o: $(src)/%.S
+	$(Q)echo "AS\t" $@
+	$(Q)$(AS) $(ASFLAGS) -o $@ $<
+
+###############################################################
+# deps
+###############################################################
+$(subdir-builtin): $(obj)/%/built-in.a: $(obj)/% ;
+
+###############################################################
+# linking built-in.a
+###############################################################
+$(obj)/built-in.a: $(real-obj-y)
+	$(Q)echo "AR\t" $@
+	$(Q)rm -f $@
+	$(Q)$(AR) $(ARFLAGS) $@ $(real-obj-y)
+
+###############################################################
+# main rules
+###############################################################
+$(obj)/: $(obj)/built-in.a $(subdir-y)
+	@:
+
+
+PHONY += $(subdir-y)
+
+$(subdir-y): 
+	$(Q)$(MAKE) $(build)=$@
+
+###############################################################
+# clean rule
+###############################################################
+PHONY += clean
+
+clean:
+	$(Q)rm -rf $(obj)/*.a $(obj)/*.o
+	$(Q)$(foreach d, $(subdir-y), $(MAKE) $(build)=$d clean;)
+
+
+.PHONY: $(PHONY)

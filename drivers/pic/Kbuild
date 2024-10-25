@@ -1,0 +1,4 @@
+obj-y += pic_eoi.o
+obj-y += pic_init.o
+obj-y += pic_int_mask.o
+obj-y += remap_irq.o

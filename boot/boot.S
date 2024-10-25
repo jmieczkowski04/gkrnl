@@ -67,6 +67,8 @@ start:
 	popf
 
 	.extern vm_boot32_main
+	movl $boot_page_directory, %ecx
+	pushl %ecx
 	pushl %ebx
 	pushl %eax
 	call vm_boot32_main

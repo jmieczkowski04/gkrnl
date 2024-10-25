@@ -9,7 +9,7 @@
 
 
 
-void vm_boot32_main(uint32_t mb_magic, void* mb_info_phys_addr)
+void vm_boot32_main(uint32_t mb_magic, void* mb_info_phys_addr, void* page_directory_address)
 {
     vga_init();
     if (mb_magic != MULTIBOOT_BOOTLOADER_MAGIC)
@@ -26,7 +26,7 @@ void vm_boot32_main(uint32_t mb_magic, void* mb_info_phys_addr)
     pic_init();
     idt_init();
     enable_sse();
-    printk("Sonne! %x", mb_magic);
+    printk("Sonne! %p", page_directory_address);
 
     for(;;);
     return;

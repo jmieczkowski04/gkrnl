@@ -49,7 +49,7 @@ launch: $(KERNELNAME)
 
 $(KERNELNAME): build gkrnl.lds
 	$(Q)echo "LD\t $(KERNELNAME)"
-	$(Q)$(LD) -T gkrnl.lds built-in.a -o $(KERNELNAME)
+	$(Q)$(LD) -z noexecstack -T gkrnl.lds built-in.a -o $(KERNELNAME)
 	$(Q)grub-file --is-x86-multiboot $(KERNELNAME)
 
 clean:

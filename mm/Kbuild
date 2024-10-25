@@ -1,0 +1,2 @@
+obj-y += gdt.o
+obj-y += gdt_asm.o

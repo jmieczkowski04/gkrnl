@@ -42,6 +42,9 @@ void fsprint(char* buffer, const char* fmt, va_list vargs)
             str = number_to_str(str, va_arg(vargs, uint32_t), 10, 0);
             break;
         case 'p':
+            str[0] = '0';
+            str[1] = 'x';
+            str += 2;
             str = number_to_str(str, (uint32_t)va_arg(vargs, void*), 16, 0);
             break;
         case '%':

@@ -1,3 +1,4 @@
 obj-y += idt.o
 obj-y += idt_asm.o
 obj-y += fsprint.o
+obj-y += printk.o

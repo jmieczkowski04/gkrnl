@@ -1,3 +1,4 @@
+#include "gkrnl/idt.h"
 #include "gkrnl/primitives.h"
 #include "boot/multiboot.h"
 #include "mm/gdt.h"
@@ -16,7 +17,9 @@ void vm_boot32_main(uint32_t mb_magic, void* mb_info_phys_addr)
     }
     gdt_init();
     pic_init();
+    idt_init();
     vga_print("Sonne!");
+    
     for(;;);
     return;
 }

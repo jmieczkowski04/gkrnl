@@ -1,0 +1,21 @@
+PhONY :=
+src := $(obj)
+kbuild-dir = $(if $(filter /%,$(src)),$(src),$(srctree)/$(src))
+kbuild-file = $(or $(wildcard $(kbuild-dir)/Kbuild),$(kbuild-dir)/Makefile)
+
+obj-y := 
+include $(kbuild-file)
+include $(srctree)/scripts/Makefile.config
+
+
+###############################################################
+# clean rule
+###############################################################
+PHONY += clean
+
+clean:
+	$(Q)rm -rf $(obj)/*.a $(obj)/*.o
+	$(Q)$(foreach d, $(subdir-y), $(MAKE) $(clean)=$d clean;)
+	$(Q)rm -f $(KERNELNAME)
+
+.PHONY: $(PHONY)

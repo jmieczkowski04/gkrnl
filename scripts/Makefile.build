@@ -51,14 +51,4 @@ PHONY += $(subdir-y)
 $(subdir-y): 
 	$(Q)$(MAKE) $(build)=$@
 
-###############################################################
-# clean rule
-###############################################################
-PHONY += clean
-
-clean:
-	$(Q)rm -rf $(obj)/*.a $(obj)/*.o
-	$(Q)$(foreach d, $(subdir-y), $(MAKE) $(build)=$d clean;)
-
-
 .PHONY: $(PHONY)

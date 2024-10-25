@@ -38,8 +38,12 @@ export srctree objtree
 
 
 BUILD_MAKEFILE := $(srctree)/scripts/Makefile.build
-build := -f $(srctree)/scripts/Makefile.build obj
+build := -f $(BUILD_MAKEFILE) obj
 export BUILD_MAKEFILE build
+
+CLEAN_MAKEFILE := $(srctree)/scripts/Makefile.clean
+clean := -f $(CLEAN_MAKEFILE) obj
+export CLEAN_MAKEFILE clean
 
 all: $(KERNELNAME) launch
 	@:
@@ -53,8 +57,7 @@ $(KERNELNAME): build gkrnl.lds
 	$(Q)grub-file --is-x86-multiboot $(KERNELNAME)
 
 clean:
-	$(Q)$(MAKE) $(build)=. clean
-	$(Q)rm -f $(KERNELNAME)
+	$(Q)$(MAKE) $(clean)=. clean
 
 prepare:
 	$(Q)mkdir -p $(OBJTREE)
